@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ورود مدیریت | Project Hub</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            padding: 35px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-sizing: border-box;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            color: inherit;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .login-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            padding: 14px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .login-error {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            background: rgba(255, 70, 70, 0.12);
+            border: 1px solid rgba(255, 70, 70, 0.25);
+            display: none;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- LOGIN -->
+
+    <main
+        class="login-page"
+        id="loginPage"
+    >
+
+        <div class="login-box">
+
+            <div class="login-header">
+
+                <h1>
+                    پنل مدیریت
+                </h1>
+
+                <p>
+                    برای ورود اطلاعات مدیریت را وارد کنید.
+                </p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        نام کاربری
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        autocomplete="username"
+                        placeholder="نام کاربری"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        رمز عبور
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        autocomplete="current-password"
+                        placeholder="رمز عبور"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    ورود به پنل
+                </button>
+
+
+                <div
+                    class="login-error"
+                    id="loginError"
+                ></div>
+
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <!-- DASHBOARD -->
+
+    <main
+        class="admin-page dashboard"
+        id="dashboard"
+    >
+
+        <div class="admin-container">
+
+
+            <header class="admin-header">
+
+                <div class="admin-title">
+
+                    <h1>
+                        پنل مدیریت
+                    </h1>
+
+                    <p>
+                        مدیریت پروژه‌های ثبت‌شده
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="refresh-button"
+                    id="refreshButton"
+                >
+                    بروزرسانی
+                </button>
+
+            </header>
+
+
+            <section class="stats">
+
+
+                <div class="stat-card">
+
+                    <span>
+                        تعداد پروژه‌ها
+                    </span>
+
+                    <strong id="projectCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>
+                        مجموع بودجه
+                    </span>
+
+                    <strong id="totalBudget">
+                        0 تومان
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>
+                        آخرین پروژه
+                    </span>
+
+                    <strong id="lastProject">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+
+            <section
+                id="projectsList"
+                class="projects-list"
+            >
+
+                <div class="loading-state">
+                    در حال دریافت پروژه‌ها...
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+
+        // ===============================
+        // LOGIN
+        // ===============================
+
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const loginPage =
+            document.getElementById("loginPage");
+
+        const dashboard =
+            document.getElementById("dashboard");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const loginError =
+            document.getElementById("loginError");
+
+
+        loginForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                loginButton.disabled =
+                    true;
+
+
+                loginButton.textContent =
+                    "در حال ورود...";
+
+
+                loginError.style.display =
+                    "none";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/admin/login",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        username,
+                                        password
+                                    })
+
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !result.success
+                    ) {
+
+                        throw new Error(
+                            result.message ||
+                            "ورود ناموفق بود."
+                        );
+
+                    }
+
+
+                    loginPage.style.display =
+                        "none";
+
+
+                    dashboard.style.display =
+                        "block";
+
+
+                    loadProjects();
+
+
+                } catch (error) {
+
+                    loginError.textContent =
+                        error.message;
+
+
+                    loginError.style.display =
+                        "block";
+
+
+                    loginButton.disabled =
+                        false;
+
+
+                    loginButton.textContent =
+                        "ورود به پنل";
+
+                }
+
+            }
+        );
+
+
+        // ===============================
+        // PROJECTS
+        // ===============================
+
+
+        const projectsList =
+            document.getElementById(
+                "projectsList"
+            );
+
+
+        const projectCount =
+            document.getElementById(
+                "projectCount"
+            );
+
+
+        const totalBudget =
+            document.getElementById(
+                "totalBudget"
+            );
+
+
+        const lastProject =
+            document.getElementById(
+                "lastProject"
+            );
+
+
+        const refreshButton =
+            document.getElementById(
+                "refreshButton"
+            );
+
+
+        function formatNumber(number) {
+
+            return Number(number || 0)
+                .toLocaleString("fa-IR");
+
+        }
+
+
+        function escapeHTML(value) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                value ?? "";
+
+            return div.innerHTML;
+
+        }
+
+
+        function createProjectCard(project) {
+
+            return `
+
+                <article class="project-card">
+
+                    <div class="project-top">
+
+                        <div>
+
+                            <h2 class="project-title">
+
+                                ${escapeHTML(project.title)}
+
+                            </h2>
+
+                            <div class="project-category">
+
+                                دسته‌بندی:
+                                ${escapeHTML(project.category)}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="project-id">
+
+                            #${project.id}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="project-description">
+
+                        ${escapeHTML(project.description)}
+
+                    </div>
+
+
+                    <div class="project-info">
+
+
+                        <div class="info-item">
+
+                            <span>
+                                بودجه
+                            </span>
+
+                            <strong>
+                                ${formatNumber(project.budget)}
+                                تومان
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                زمان انجام
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    project.deadline ||
+                                    "تعیین نشده"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                نام مشتری
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(project.name)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                شماره تماس
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(project.phone)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                ایمیل
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    project.email ||
+                                    "ثبت نشده"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span>
+                                تاریخ ثبت
+                            </span>
+
+                            <strong>
+                                ${new Date(
+                                    project.created_at
+                                ).toLocaleString("fa-IR")}
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+        async function loadProjects() {
+
+            projectsList.innerHTML = `
+
+                <div class="loading-state">
+
+                    در حال دریافت پروژه‌ها...
+
+                </div>
+
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/projects"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        "دریافت پروژه‌ها انجام نشد."
+                    );
+
+                }
+
+
+                const projects =
+                    data.projects || [];
+
+
+                projectCount.textContent =
+                    formatNumber(
+                        projects.length
+                    );
+
+
+                const total =
+                    projects.reduce(
+                        (sum, project) =>
+                            sum +
+                            Number(
+                                project.budget || 0
+                            ),
+                        0
+                    );
+
+
+                totalBudget.textContent =
+                    formatNumber(total) +
+                    " تومان";
+
+
+                lastProject.textContent =
+                    projects.length > 0
+                        ? projects[0].title
+                        : "-";
+
+
+                if (
+                    projects.length === 0
+                ) {
+
+                    projectsList.innerHTML = `
+
+                        <div class="empty-state">
+
+                            هنوز هیچ پروژه‌ای ثبت نشده است.
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                projectsList.innerHTML =
+                    projects
+                        .map(createProjectCard)
+                        .join("");
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                projectsList.innerHTML = `
+
+                    <div class="error-state">
+
+                        خطا در دریافت پروژه‌ها.
+
+                        <br><br>
+
+                        مطمئن شوید سرور در حال اجراست.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        refreshButton.addEventListener(
+            "click",
+            loadProjects
+        );
+
+
+    </script>
+
+</body>
+
+</html>

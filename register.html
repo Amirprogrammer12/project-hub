@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ثبت پروژه | Project Hub</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        .register-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .register-header p {
+            opacity: 0.75;
+        }
+
+        .project-form {
+            width: 100%;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            color: inherit;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            direction: rtl;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .form-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .submit-button {
+            border: none;
+            cursor: pointer;
+            padding: 14px 35px;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 12px;
+        }
+
+        .success-message p {
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .back-button {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .register-page {
+                padding: 25px 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <main class="register-page">
+
+        <div class="register-container">
+
+            <div class="register-header">
+
+                <h1>ثبت پروژه جدید</h1>
+
+                <p>
+                    اطلاعات پروژه خود را وارد کنید تا بررسی و پیگیری شود.
+                </p>
+
+            </div>
+
+
+            <div id="formContainer">
+
+                <form
+                    id="projectForm"
+                    class="project-form"
+                >
+
+                    <div class="form-grid">
+
+
+                        <!-- Project title -->
+
+                        <div class="form-group full">
+
+                            <label for="projectTitle">
+                                عنوان پروژه
+                            </label>
+
+                            <input
+                                type="text"
+                                id="projectTitle"
+                                name="title"
+                                placeholder="مثلاً طراحی سایت فروشگاهی"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Category -->
+
+                        <div class="form-group">
+
+                            <label for="category">
+                                دسته‌بندی
+                            </label>
+
+                            <select
+                                id="category"
+                                name="category"
+                                required
+                            >
+
+                                <option value="">
+                                    انتخاب دسته‌بندی
+                                </option>
+
+                                <option value="طراحی سایت">
+                                    طراحی سایت
+                                </option>
+
+                                <option value="برنامه نویسی">
+                                    برنامه نویسی
+                                </option>
+
+                                <option value="اپلیکیشن">
+                                    اپلیکیشن
+                                </option>
+
+                                <option value="ربات">
+                                    ربات و اتوماسیون
+                                </option>
+
+                                <option value="گرافیک">
+                                    طراحی گرافیک
+                                </option>
+
+                                <option value="سایر">
+                                    سایر
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Budget -->
+
+                        <div class="form-group">
+
+                            <label for="budget">
+                                بودجه (تومان)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="budget"
+                                name="budget"
+                                placeholder="مثلاً 20000000"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Deadline -->
+
+                        <div class="form-group">
+
+                            <label for="deadline">
+                                زمان مورد نیاز
+                            </label>
+
+                            <input
+                                type="text"
+                                id="deadline"
+                                name="deadline"
+                                placeholder="مثلاً 2 هفته"
+                            >
+
+                        </div>
+
+
+                        <!-- Name -->
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                نام و نام خانوادگی
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="نام شما"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Phone -->
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                شماره تماس
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="09123456789"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                ایمیل
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="example@email.com"
+                            >
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <div class="form-group full">
+
+                            <label for="description">
+                                توضیحات پروژه
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                placeholder="توضیحات کامل پروژه، امکانات مورد نیاز و جزئیات را بنویسید..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="submit-button"
+                        >
+                            ثبت پروژه
+                            <span>←</span>
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Success -->
+
+            <div
+                id="successMessage"
+                class="success-message"
+                hidden
+            >
+
+                <h2>
+                    پروژه با موفقیت ثبت شد
+                </h2>
+
+                <p>
+                    اطلاعات پروژه شما با موفقیت دریافت و ذخیره شد.
+                </p>
+
+                <a
+                    href="index.html"
+                    class="submit-button back-button"
+                >
+                    بازگشت به صفحه اصلی
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const form =
+            document.getElementById("projectForm");
+
+        const formContainer =
+            document.getElementById("formContainer");
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const submitButton =
+                    form.querySelector(
+                        ".submit-button"
+                    );
+
+
+                const project = {
+
+                    title:
+                        document
+                            .getElementById("projectTitle")
+                            .value
+                            .trim(),
+
+                    category:
+                        document
+                            .getElementById("category")
+                            .value,
+
+                    description:
+                        document
+                            .getElementById("description")
+                            .value
+                            .trim(),
+
+                    budget:
+                        document
+                            .getElementById("budget")
+                            .value,
+
+                    deadline:
+                        document
+                            .getElementById("deadline")
+                            .value
+                            .trim(),
+
+                    name:
+                        document
+                            .getElementById("name")
+                            .value
+                            .trim(),
+
+                    phone:
+                        document
+                            .getElementById("phone")
+                            .value
+                            .trim(),
+
+                    email:
+                        document
+                            .getElementById("email")
+                            .value
+                            .trim()
+
+                };
+
+
+                submitButton.disabled = true;
+
+                submitButton.innerHTML =
+                    "در حال ثبت پروژه...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/projects",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        project
+                                    )
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !result.success
+                    ) {
+
+                        throw new Error(
+                            result.message ||
+                            "ثبت پروژه انجام نشد."
+                        );
+
+                    }
+
+
+                    formContainer.style.display =
+                        "none";
+
+
+                    successMessage.hidden =
+                        false;
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+
+                    console.log(
+                        "Project saved:",
+                        result
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Registration error:",
+                        error
+                    );
+
+
+                    alert(
+                        error.message ||
+                        "ارتباط با سرور برقرار نشد."
+                    );
+
+
+                    submitButton.disabled =
+                        false;
+
+
+                    submitButton.innerHTML =
+                        'ثبت پروژه <span>←</span>';
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
