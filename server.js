@@ -4,7 +4,9 @@ const Database = require("better-sqlite3");
 
 const app = express();
 
-const PORT = 3000;
+// Render خودش PORT را تعیین می‌کند.
+// روی کامپیوتر خودمان اگر PORT وجود نداشته باشد، از 3000 استفاده می‌کنیم.
+const PORT = process.env.PORT || 3000;
 
 // ===============================
 // ADMIN SETTINGS
