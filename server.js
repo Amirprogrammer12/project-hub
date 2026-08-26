@@ -4,6 +4,8 @@ const Database = require("better-sqlite3");
 
 const app = express();
 
+// Render PORT را خودش تعیین می‌کند.
+// روی کامپیوتر شخصی اگر PORT وجود نداشته باشد از 3000 استفاده می‌کنیم.
 const PORT = process.env.PORT || 3000;
 
 // ===============================
@@ -49,7 +51,7 @@ app.use(
 );
 
 // ===============================
-// SEO FILES
+// ROBOTS.TXT
 // ===============================
 
 app.get("/robots.txt", (req, res) => {
@@ -65,13 +67,20 @@ Sitemap: https://project-hub-amir.onrender.com/sitemap.xml`
 
 });
 
+// ===============================
+// SITEMAP.XML
+// ===============================
+
 app.get("/sitemap.xml", (req, res) => {
 
     res.type("application/xml");
 
     res.send(
 `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
 
     <url>
         <loc>https://project-hub-amir.onrender.com/</loc>
@@ -325,6 +334,8 @@ app.get("/api/projects/:id", (req, res) => {
 // START SERVER
 // ===============================
 
+// مهم برای Render:
+// سرور باید روی تمام Network Interfaceها گوش دهد.
 app.listen(PORT, "0.0.0.0", () => {
 
     console.log("");
@@ -344,7 +355,7 @@ app.listen(PORT, "0.0.0.0", () => {
     console.log("");
 
     console.log(
-        `Server running at: http://localhost:${PORT}`
+        `Server running on port ${PORT}`
     );
 
     console.log("");
